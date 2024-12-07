@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_core: ^3.8.0
   firebase_auth: ^5.3.3
+  google_generative_ai: ^0.4.6
 
 dev_dependencies:
   flutter_test:
@@ -57,7 +58,10 @@ flutter:
   assets:
     - assets/octopus.png
     - assets/splash_icon.png
-    - assets/splash_background.jpg
+    - assets/shrimp_icon.png
+    - assets/heart_icon.png
+    - assets/dashboard_background.jpg
+   
 
 
 
