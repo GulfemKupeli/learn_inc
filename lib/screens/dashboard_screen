@@ -15,6 +15,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   int points = 0;
   int lives = 3;
   int streakDays = 5; // Example streak days, replace with dynamic logic
+  bool isDayMode = true; // Day-Night mode toggle
 
   final List<Map<String, dynamic>> gridOptions = [
     {'title': 'Load a File', 'icon': Icons.upload_file, 'onTap': () {}},
@@ -42,10 +43,16 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.dispose();
   }
 
+  void toggleTheme() {
+    setState(() {
+      isDayMode = !isDayMode;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFFC3A6), // Light pastel background
+      backgroundColor: isDayMode ? Color(0xffFFC3A6) : Color(0xFF37474F),
       body: Stack(
         children: [
           // Top Bar Wave
@@ -55,7 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             right: 0,
             child: CustomPaint(
               size: Size(double.infinity, 100),
-              painter: WavePainter(),
+              painter: WavePainter(isDayMode: isDayMode),
             ),
           ),
           Column(
@@ -76,7 +83,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                               Image.asset('assets/shrimp_icon.png', height: 24),
                               SizedBox(width: 4),
                               Text('$points',
-                                  style: TextStyle(color: Colors.black)),
+                                  style: TextStyle(
+                                      color: isDayMode
+                                          ? Colors.black
+                                          : Colors.white)),
                             ],
                           ),
                           SizedBox(width: 16),
@@ -86,18 +96,25 @@ class _DashboardScreenState extends State<DashboardScreen>
                               Image.asset('assets/heart_icon.png', height: 24),
                               SizedBox(width: 4),
                               Text('$lives',
-                                  style: TextStyle(color: Colors.black)),
+                                  style: TextStyle(
+                                      color: isDayMode
+                                          ? Colors.black
+                                          : Colors.white)),
                             ],
                           ),
                         ],
                       ),
                       // Profile Icon
                       IconButton(
-                        icon: Icon(Icons.person, color: Colors.white),
+                        icon: Icon(Icons.person,
+                            color: isDayMode ? Colors.black : Colors.white),
                         onPressed: () {
                           showModalBottomSheet(
                             context: context,
                             builder: (context) => Container(
+                              color: isDayMode
+                                  ? Colors.white
+                                  : Color(0xFF263238), // Adjust color
                               padding: EdgeInsets.all(16),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -108,16 +125,71 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         AssetImage('assets/profile_picture.png'),
                                   ),
                                   SizedBox(height: 10),
-                                  Text('John Doe',
-                                      style: TextStyle(fontSize: 18)),
+                                  Text(
+                                    'John Doe',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: isDayMode
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                  ),
                                   ListTile(
-                                    leading: Icon(Icons.settings),
-                                    title: Text('Settings'),
+                                    leading: Icon(
+                                      Icons.settings,
+                                      color: isDayMode
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                    title: Text(
+                                      'Settings',
+                                      style: TextStyle(
+                                        color: isDayMode
+                                            ? Colors.black
+                                            : Colors.white,
+                                      ),
+                                    ),
                                     onTap: () {},
                                   ),
                                   ListTile(
-                                    leading: Icon(Icons.logout),
-                                    title: Text('Log Out'),
+                                    leading: Icon(
+                                      isDayMode
+                                          ? Icons.wb_sunny
+                                          : Icons.nights_stay,
+                                      color: isDayMode
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                    title: Text(
+                                      isDayMode
+                                          ? 'Switch to Night Mode'
+                                          : 'Switch to Day Mode',
+                                      style: TextStyle(
+                                        color: isDayMode
+                                            ? Colors.black
+                                            : Colors.white,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      toggleTheme();
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  ListTile(
+                                    leading: Icon(
+                                      Icons.logout,
+                                      color: isDayMode
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                    title: Text(
+                                      'Log Out',
+                                      style: TextStyle(
+                                        color: isDayMode
+                                            ? Colors.black
+                                            : Colors.white,
+                                      ),
+                                    ),
                                     onTap: () {},
                                   ),
                                 ],
@@ -157,7 +229,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Colors.grey[600], // Light gray for subtlety
+                      color: isDayMode
+                          ? Colors.grey[600]
+                          : Colors.grey[300], // Adjust for theme
                     ),
                   ),
                 ],
@@ -169,14 +243,16 @@ class _DashboardScreenState extends State<DashboardScreen>
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: isDayMode ? Colors.white : Colors.black54,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(60),
                       topRight: Radius.circular(60),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: isDayMode
+                            ? Colors.grey.withOpacity(0.3)
+                            : Colors.black45,
                         offset: Offset(0, -5),
                         blurRadius: 20,
                       ),
@@ -200,7 +276,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                               Icon(
                                 gridOptions[index]['icon'],
                                 size: 40,
-                                color: Color(0xffFFC3A6),
+                                color: isDayMode
+                                    ? Color(0xffFFC3A6)
+                                    : Colors.grey[300],
                               ),
                               SizedBox(height: 8),
                               Text(
@@ -208,7 +286,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Colors.grey[800],
+                                  color: isDayMode
+                                      ? Colors.grey[800]
+                                      : Colors.grey[400],
                                 ),
                               ),
                             ],
@@ -222,7 +302,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                           // Your onPressed logic here
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
+                          backgroundColor:
+                              isDayMode ? Colors.grey : Colors.grey[700],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -230,7 +311,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                         ),
                         child: Text(
                           'Market',
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -246,16 +330,22 @@ class _DashboardScreenState extends State<DashboardScreen>
 }
 
 class WavePainter extends CustomPainter {
+  final bool isDayMode;
+
+  WavePainter({required this.isDayMode});
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Color(0xFF80DEEA)
+      ..color = isDayMode ? Color(0xFF80DEEA) : Color(0xFF263238)
       ..style = PaintingStyle.fill;
 
     Path path = Path();
     path.lineTo(0, size.height * 0.75);
-    path.quadraticBezierTo(size.width * 0.25, size.height, size.width * 0.5, size.height * 0.75);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.5, size.width, size.height * 0.75);
+    path.quadraticBezierTo(size.width * 0.25, size.height, size.width * 0.5,
+        size.height * 0.75);
+    path.quadraticBezierTo(size.width * 0.75, size.height * 0.5, size.width,
+        size.height * 0.75);
     path.lineTo(size.width, 0);
     path.close();
 
@@ -267,5 +357,3 @@ class WavePainter extends CustomPainter {
     return false;
   }
 }
-
-

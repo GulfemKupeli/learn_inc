@@ -4,80 +4,97 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF80DEEA), // Pastel light blue background
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Welcome Image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16.0), // Rounded corners
-              child: Image.asset(
-                'assets/welcome_image.png', // Replace with your image path
-                fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          // Background Gradient
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF80DEEA), Color(0xFF00796B)], // Day mode colors
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
               ),
             ),
-            SizedBox(height: 20),
-            // Welcome Text
-            Text(
-              "Welcome",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          ),
+          // Main Content
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Welcome Image
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16.0), // Rounded corners
+                    child: Image.asset(
+                      'assets/welcome_image.png', // Replace with your image path
+                      fit: BoxFit.cover,
+                      height: 180, // Adjusted for minimalistic design
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Welcome Text
+                  Text(
+                    "Welcome to Learn.inc",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // Subheading Text
+                  Text(
+                    "Learn faster and have fun while doing it!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                  ),
+                  SizedBox(height: 40),
+                  // Sign Up Button
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register'); // Navigate to registration screen
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFB2DFDB), // Softer pastel teal
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  // Already have an account? Login
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login'); // Navigate to login screen
+                    },
+                    child: Text(
+                      "Already have an account? Login",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 10),
-            // Subheading Text
-            Text(
-              "Make learning faster and more enjoyable with Learn.inc.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[700],
-              ),
-            ),
-            SizedBox(height: 30),
-            // Sign Up Button
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/register'); // Navigate to registration screen
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFFFC3A6), // Soft peach color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding: EdgeInsets.symmetric(vertical: 16),
-              ),
-              child: Text(
-                "Sign Up",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            // Already have an account? Login
-            TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/login'); // Navigate to login screen
-              },
-              child: Text(
-                "Already have an account? Login",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
