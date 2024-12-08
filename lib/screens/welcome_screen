@@ -4,7 +4,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFA8DADC), // Pastel light blue background
+      backgroundColor: Color(0xFF80DEEA), // Pastel light blue background
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

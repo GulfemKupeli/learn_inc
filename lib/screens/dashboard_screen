@@ -249,7 +249,7 @@ class WavePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Color(0xff80CBC4)
+      ..color = Color(0xFF80DEEA)
       ..style = PaintingStyle.fill;
 
     Path path = Path();
