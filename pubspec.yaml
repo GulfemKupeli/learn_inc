@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^3.8.0
   firebase_auth: ^5.3.3
   google_generative_ai: ^0.4.6
+  animate_do: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -60,9 +61,10 @@ flutter:
     - assets/splash_icon.png
     - assets/shrimp_icon.png
     - assets/heart_icon.png
-    - assets/dashboard_background.jpg
     - assets/morning_mascot.png
     - assets/night_mascot.png
+    - assets/streak_icon.png
+    - assets/welcome_image.png
    
 
 

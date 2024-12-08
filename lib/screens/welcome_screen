@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+
+class WelcomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFFA8DADC), // Pastel light blue background
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Welcome Image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.0), // Rounded corners
+              child: Image.asset(
+                'assets/welcome_image.png', // Replace with your image path
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 20),
+            // Welcome Text
+            Text(
+              "Welcome",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            SizedBox(height: 10),
+            // Subheading Text
+            Text(
+              "Make learning faster and more enjoyable with Learn.inc.",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[700],
+              ),
+            ),
+            SizedBox(height: 30),
+            // Sign Up Button
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/register'); // Navigate to registration screen
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFFFC3A6), // Soft peach color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: Text(
+                "Sign Up",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            // Already have an account? Login
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login'); // Navigate to login screen
+              },
+              child: Text(
+                "Already have an account? Login",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

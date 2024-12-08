@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; // Import Firebase Core
-import 'package:learn_inc/screens/splash_screen';
+import 'package:learn_inc/screens/welcome_screen';
 import 'package:learn_inc/screens/login_screen';
 import 'package:learn_inc/screens/registration_screen';
 import 'package:learn_inc/screens/dashboard_screen';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(),
+        '/': (context) => WelcomeScreen(),
         '/login': (context) => LoginScreen(),
         '/register': (context) => RegistrationScreen(),
         '/dashboard': (context) => DashboardScreen(),
