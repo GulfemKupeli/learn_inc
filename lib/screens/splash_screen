@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen>
               SizedBox(height: 20),
               // App Name Text
               Text(
-                "Learn.inc", // Replace with your app name
+                "", // Replace with your app name
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
