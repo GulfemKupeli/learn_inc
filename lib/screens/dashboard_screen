@@ -46,184 +46,226 @@ class _DashboardScreenState extends State<DashboardScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffFFC3A6), // Light pastel background
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
         children: [
-          // Top Bar with Points and Lives
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+          // Top Bar Wave
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: CustomPaint(
+              size: Size(double.infinity, 100),
+              painter: WavePainter(),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Top Bar with Points and Lives
+              SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Points Display
                       Row(
                         children: [
-                          Image.asset('assets/shrimp_icon.png', height: 24),
-                          SizedBox(width: 4),
-                          Text('$points', style: TextStyle(color: Colors.black)),
+                          // Points Display
+                          Row(
+                            children: [
+                              Image.asset('assets/shrimp_icon.png', height: 24),
+                              SizedBox(width: 4),
+                              Text('$points',
+                                  style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                          SizedBox(width: 16),
+                          // Lives Display
+                          Row(
+                            children: [
+                              Image.asset('assets/heart_icon.png', height: 24),
+                              SizedBox(width: 4),
+                              Text('$lives',
+                                  style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
                         ],
                       ),
-                      SizedBox(width: 16),
-                      // Lives Display
-                      Row(
-                        children: [
-                          Image.asset('assets/heart_icon.png', height: 24),
-                          SizedBox(width: 4),
-                          Text('$lives', style: TextStyle(color: Colors.black)),
-                        ],
+                      // Profile Icon
+                      IconButton(
+                        icon: Icon(Icons.person, color: Colors.white),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => Container(
+                              padding: EdgeInsets.all(16),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage:
+                                        AssetImage('assets/profile_picture.png'),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text('John Doe',
+                                      style: TextStyle(fontSize: 18)),
+                                  ListTile(
+                                    leading: Icon(Icons.settings),
+                                    title: Text('Settings'),
+                                    onTap: () {},
+                                  ),
+                                  ListTile(
+                                    leading: Icon(Icons.logout),
+                                    title: Text('Log Out'),
+                                    onTap: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
-                  // Profile Icon
-                  IconButton(
-                    icon: Icon(Icons.person, color: Colors.black),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => Container(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage:
-                                    AssetImage('assets/profile_picture.png'),
-                              ),
-                              SizedBox(height: 10),
-                              Text('John Doe', style: TextStyle(fontSize: 18)),
-                              ListTile(
-                                leading: Icon(Icons.settings),
-                                title: Text('Settings'),
-                                onTap: () {},
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.logout),
-                                title: Text('Log Out'),
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                ),
+              ),
+              // Animated Mascot
+              AnimatedBuilder(
+                animation: _animation,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0, _animation.value),
+                    child: Image.asset(
+                      'assets/octopus.png',
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ),
+              // Streak Display
+              Column(
+                children: [
+                  Image.asset(
+                    'assets/streak_icon.png',
+                    height: 50,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    '$streakDays Days Streak',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[600], // Light gray for subtlety
+                    ),
                   ),
                 ],
               ),
-            ),
-          ),
-          // Animated Mascot
-          AnimatedBuilder(
-            animation: _animation,
-            builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(0, _animation.value),
-                child: Image.asset(
-                  'assets/octopus.png',
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
-              );
-            },
-          ),
-          // Streak Display
-          Column(
-            children: [
-              Image.asset(
-                'assets/streak_icon.png',
-                height: 50,
-              ),
-              SizedBox(height: 8),
-              Text(
-                '$streakDays Days Streak',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[600], // Light gray for subtlety
+              // Grid Options with a Card-like Background
+              FadeInUp(
+                duration: Duration(milliseconds: 1000),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(60),
+                      topRight: Radius.circular(60),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        offset: Offset(0, -5),
+                        blurRadius: 20,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Grid Options
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1.2,
+                        ),
+                        itemCount: gridOptions.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Icon(
+                                gridOptions[index]['icon'],
+                                size: 40,
+                                color: Color(0xffFFC3A6),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                gridOptions[index]['title'],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      SizedBox(height: 16),
+                      // Market Button
+                      ElevatedButton(
+                        onPressed: () {
+                          // Your onPressed logic here
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                        ),
+                        child: Text(
+                          'Market',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
-          ),
-          // Grid Options with a Card-like Background
-          FadeInUp(
-            duration: Duration(milliseconds: 1000),
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(60),
-                  topRight: Radius.circular(60),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    offset: Offset(0, -5),
-                    blurRadius: 20,
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Grid Options
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1.2,
-                    ),
-                    itemCount: gridOptions.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Icon(
-                            gridOptions[index]['icon'],
-                            size: 40,
-                            color: Color(0xffFFC3A6),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            gridOptions[index]['title'],
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey[800],
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  // Explore Button
-                  ElevatedButton(
-                    onPressed: () {
-                      // Your onPressed logic here
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: Text(
-                      'Explore Now',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),
     );
   }
 }
+
+class WavePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Color(0xff80CBC4)
+      ..style = PaintingStyle.fill;
+
+    Path path = Path();
+    path.lineTo(0, size.height * 0.75);
+    path.quadraticBezierTo(size.width * 0.25, size.height, size.width * 0.5, size.height * 0.75);
+    path.quadraticBezierTo(size.width * 0.75, size.height * 0.5, size.width, size.height * 0.75);
+    path.lineTo(size.width, 0);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+
