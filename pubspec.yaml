@@ -40,6 +40,8 @@ dependencies:
   firebase_auth: ^5.3.3
   google_generative_ai: ^0.4.6
   animate_do: ^3.0.1
+  http: 1.2.2
+  file_picker: ^8.1.4
 
 dev_dependencies:
   flutter_test:

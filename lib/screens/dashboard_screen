@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'dart:math' as math;
 
@@ -16,12 +17,6 @@ class _DashboardScreenState extends State<DashboardScreen>
   int lives = 3;
   int streakDays = 5;
   bool isDayMode = true; // Toggle for Day-Night mode
-
-  final List<Map<String, dynamic>> gridOptions = [
-    {'title': 'Load a File', 'icon': Icons.upload_file, 'onTap': () {}},
-    {'title': 'Chat', 'icon': Icons.chat, 'onTap': () {}},
-    {'title': 'Learn', 'icon': Icons.lightbulb, 'onTap': () {}},
-  ];
 
   @override
   void initState() {
@@ -49,13 +44,45 @@ class _DashboardScreenState extends State<DashboardScreen>
     });
   }
 
+  // Dosya yükleme işlemini başlatan fonksiyon
+  void _showFilePicker() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any, // İstenirse belirli türde dosyalar için değiştirilebilir
+      allowMultiple: false,
+    );
+
+    if (result != null) {
+      final filePath = result.files.single.path;
+      if (filePath != null) {
+        _showFilePopup(filePath);
+      }
+    }
+  }
+
+  // Dosya seçimi sonrası pop-up gösterimi
+  void _showFilePopup(String filePath) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('File Selected'),
+        content: Text('Selected file path:\n$filePath'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: isDayMode ? Color(0xFFE0F7FA) : Color(0xFF263238), // Muted blue for day mode
+      backgroundColor: isDayMode ? Color(0xFFE0F7FA) : Color(0xFF263238),
       body: Stack(
         children: [
-          // Top Bar Wave
+          // Üst Bar Dalga Tasarımı
           Positioned(
             top: 0,
             left: 0,
@@ -68,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Top Bar with Points and Lives
+              // Üst Bar
               SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -77,7 +104,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                     children: [
                       Row(
                         children: [
-                          // Points Display
                           Row(
                             children: [
                               Image.asset('assets/shrimp_icon.png', height: 24),
@@ -90,7 +116,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                             ],
                           ),
                           SizedBox(width: 16),
-                          // Lives Display
                           Row(
                             children: [
                               Image.asset('assets/heart_icon.png', height: 24),
@@ -104,7 +129,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                           ),
                         ],
                       ),
-                      // Profile Icon
                       IconButton(
                         icon: Icon(Icons.person,
                             color: isDayMode ? Colors.black87 : Colors.white),
@@ -114,7 +138,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             builder: (context) => Container(
                               color: isDayMode
                                   ? Colors.white
-                                  : Color(0xFF37474F), // Adjust for theme
+                                  : Color(0xFF37474F),
                               padding: EdgeInsets.all(16),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -202,7 +226,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   ),
                 ),
               ),
-              // Animated Mascot
+              // Animasyonlu Karakter
               AnimatedBuilder(
                 animation: _animation,
                 builder: (context, child) {
@@ -216,7 +240,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   );
                 },
               ),
-              // Streak Display
+              // Streak Göstergesi
               Column(
                 children: [
                   Image.asset(
@@ -231,12 +255,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                       fontWeight: FontWeight.w500,
                       color: isDayMode
                           ? Colors.grey[700]
-                          : Colors.grey[300], // Adjust for theme
+                          : Colors.grey[300],
                     ),
                   ),
                 ],
               ),
-              // Grid Options with a Card-like Background
+              // Gridview
               FadeInUp(
                 duration: Duration(milliseconds: 1000),
                 child: Container(
@@ -258,66 +282,49 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ),
                     ],
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Grid Options
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 1.2,
-                        ),
-                        itemCount: gridOptions.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              Icon(
-                                gridOptions[index]['icon'],
-                                size: 40,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.2,
+                    ),
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      final titles = ['Load a File', 'Chat', 'Learn'];
+                      final icons = [
+                        Icons.upload_file,
+                        Icons.chat,
+                        Icons.lightbulb
+                      ];
+                      return GestureDetector(
+                        onTap: index == 0
+                            ? _showFilePicker
+                            : () {}, // Load File tıklanınca dosya seçici açılır
+                        child: Column(
+                          children: [
+                            Icon(
+                              icons[index],
+                              size: 40,
+                              color: isDayMode
+                                  ? Color(0xff4DD0E1)
+                                  : Colors.grey[300],
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              titles[index],
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                                 color: isDayMode
-                                    ? Color(0xff4DD0E1) // Softer blue for day
-                                    : Colors.grey[300],
+                                    ? Colors.grey[800]
+                                    : Colors.grey[400],
                               ),
-                              SizedBox(height: 8),
-                              Text(
-                                gridOptions[index]['title'],
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: isDayMode
-                                      ? Colors.grey[800]
-                                      : Colors.grey[400],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      SizedBox(height: 16),
-                      // Market Button
-                      ElevatedButton(
-                        onPressed: () {
-                          // Your onPressed logic here
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              isDayMode ? Color(0xFFB2EBF2) : Colors.grey[700],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          'Market',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),
