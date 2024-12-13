@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:file_picker/file_picker.dart';
-
-import 'dart:math' as math;
+import 'package:learn_inc/file_upload_helper'; // Dosya işlemleri için yardımcı sınıf
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -44,38 +42,6 @@ class _DashboardScreenState extends State<DashboardScreen>
     });
   }
 
-  // Dosya yükleme işlemini başlatan fonksiyon
-  void _showFilePicker() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any, // İstenirse belirli türde dosyalar için değiştirilebilir
-      allowMultiple: false,
-    );
-
-    if (result != null) {
-      final filePath = result.files.single.path;
-      if (filePath != null) {
-        _showFilePopup(filePath);
-      }
-    }
-  }
-
-  // Dosya seçimi sonrası pop-up gösterimi
-  void _showFilePopup(String filePath) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('File Selected'),
-        content: Text('Selected file path:\n$filePath'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                         children: [
                           Row(
                             children: [
-                              Image.asset('assets/shrimp_icon.png', height: 24),
+                              Icon(Icons.star, color: Colors.yellow),
                               SizedBox(width: 4),
                               Text('$points',
                                   style: TextStyle(
@@ -118,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                           SizedBox(width: 16),
                           Row(
                             children: [
-                              Image.asset('assets/heart_icon.png', height: 24),
+                              Icon(Icons.favorite, color: Colors.red),
                               SizedBox(width: 4),
                               Text('$lives',
                                   style: TextStyle(
@@ -260,7 +226,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   ),
                 ],
               ),
-              // Gridview
+              // Grid Options
               FadeInUp(
                 duration: Duration(milliseconds: 1000),
                 child: Container(
@@ -299,8 +265,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ];
                       return GestureDetector(
                         onTap: index == 0
-                            ? _showFilePicker
-                            : () {}, // Load File tıklanınca dosya seçici açılır
+                            ? () => FileUploadHelper.showFilePicker(context)
+                            : () {},
                         child: Column(
                           children: [
                             Icon(
